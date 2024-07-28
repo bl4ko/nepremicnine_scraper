@@ -1,0 +1,61 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: check-yaml
+      - id: check-json
+      - id: check-xml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: pretty-format-json
+        args: ["--autofix"]
+      - id: check-case-conflict
+
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.4
+    hooks:
+      - id: gitleaks
+
+  - repo: https://github.com/streetsidesoftware/cspell-cli
+    rev: v8.13.1
+    hooks:
+      - id: cspell
+
+  - repo: local
+    hooks:
+      - id: pylint
+        name: "Pylint: Analyzes Python source code looking for errors"
+        entry: pylint
+        language: python
+        types: [python]
+        args:
+          - --disable=import-error
+      - id: black
+        name: black
+        description: "Black: The uncompromising Python code formatter"
+        entry: black
+        language: python
+        require_serial: true
+        types_or: [python, pyi]
+
+      - id: unittests
+        name: run unit tests
+        entry: python -m unittest
+        language: system
+        pass_filenames: false
+        args: ["discover"]
+
+  # Python type enforcing
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.11.1
+    hooks:
+      - id: mypy
+        args:
+          [
+            --disallow-untyped-defs,
+            --disallow-incomplete-defs,
+            --disallow-untyped-calls,
+            --ignore-missing-imports,
+            --explicit-package-bases,
+          ]
+        additional_dependencies: [types-requests, types-PyYAML]

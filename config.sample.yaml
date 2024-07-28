@@ -1,0 +1,102 @@
+nastavitev:
+  mail_from: user.surname@example.com
+  smtp_server: smtp.gmail.com
+  smtp_port: 465
+  mail_to:
+    - myname@example.com
+poizvedbe:
+  - ime: siska1
+    posredovanje: prodaja
+    regija: ljubljana-mesto
+    pod_regija: ljubljana-siska
+    leto_od: 1950
+    leto_do: 1999
+    m2_od: 0
+    m2_do: 40
+    cena_m2_do: 3800
+
+  - ime: siska2
+    posredovanje: prodaja
+    regija: ljubljana-mesto
+    pod_regija: ljubljana-siska
+    leto_od: 1950
+    leto_do: 1999
+    m2_od: 40
+    m2_do: 70
+    cena_m2_do: 3600
+
+  - ime: siska3
+    posredovanje: prodaja
+    regija: ljubljana-mesto
+    pod_regija: ljubljana-siska
+    leto_od: 2000
+    m2_od: 0
+    m2_do: 40
+    cena_m2_do: 4300
+
+  - ime: siska4
+    posredovanje: prodaja
+    regija: ljubljana-mesto
+    pod_regija: ljubljana-siska
+    leto_od: 2000
+    m2_od: 40
+    m2_do: 70
+    cena_m2_do: 4200
+
+  - ime: bezigrad1
+    posredovanje: prodaja
+    regija: ljubljana-mesto
+    pod_regija: ljubljana-bezigrad
+    leto_od: 1950
+    leto_do: 1999
+    m2_od: 0
+    m2_do: 40
+    cena_m2_do: 3900
+
+  - ime: bezigrad2
+    posredovanje: prodaja
+    regija: ljubljana-mesto
+    pod_regija: ljubljana-bezigrad
+    leto_od: 1950
+    leto_do: 1999
+    m2_od: 40
+    m2_do: 70
+    cena_m2_do: 3800
+
+  - ime: bezigrad3
+    posredovanje: prodaja
+    regija: ljubljana-mesto
+    pod_regija: ljubljana-bezigrad
+    leto_od: 2000
+    m2_od: 0
+    m2_do: 40
+    cena_m2_do: 4400
+
+  - ime: bezigrad4
+    posredovanje: prodaja
+    regija: ljubljana-mesto
+    pod_regija: ljubljana-bezigrad
+    leto_od: 2000
+    m2_od: 40
+    m2_do: 70
+    cena_m2_do: 4300
+
+  - ime: vic1
+    posredovanje: prodaja
+    regija: ljubljana-mesto
+    pod_regija: ljubljana-vic-rudnik
+    leto_od: 1950
+    leto_do: 1999
+    m2_od: 0
+    m2_do: 40
+    cena_m2_do: 3800
+
+  - ime: vic2
+    posredovanje: prodaja
+    regija: ljubljana-mesto
+    pod_regija: ljubljana-vic-rudnik
+    leto_od: 1950
+    leto_do: 1999
+    m2_od: 40
+    m2_do: 70
+    cena_m2_do: 3700
