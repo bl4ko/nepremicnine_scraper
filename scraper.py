@@ -229,7 +229,9 @@ def main() -> None:
 
     # Parse the config file
     logger.info("Parsing the config file...")
-    parser = ConfigParser("./config.yaml")
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    config_path = os.path.join(script_dir, "config.yaml")
+    parser = ConfigParser(config_path)
     parsed_config = parser.parse_config()
 
     # Run the scraper for each query in the config file
