@@ -221,17 +221,18 @@ def main() -> None:
         logger.error("Please set the MAIL_FROM_PASSWORD environment variable.")
         return
 
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    query_results_path = os.path.join(script_dir, "query_results.json")
+
     # Read query_results.json if it exists
     logger.info("Reading existing entries from query_results.json if it exists...")
     existing_entries: Set[ExtractedEntry] = set()  # Added type annotation
-    if os.path.exists("query_results.json"):
-        existing_entries = load_entries_from_file("query_results.json")
+    if os.path.exists(query_results_path):
+        existing_entries = load_entries_from_file(query_results_path)
 
     # Parse the config file
     logger.info("Parsing the config file...")
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    config_path = os.path.join(script_dir, "config.yaml")
-    parser = ConfigParser(config_path)
+    parser = ConfigParser(os.path.join(script_dir, "config.yaml"))
     parsed_config = parser.parse_config()
 
     # Run the scraper for each query in the config file
@@ -264,7 +265,7 @@ def main() -> None:
         )
 
         # Update the query_results.json file with the new entries
-        with open("query_results.json", "w", encoding="UTF8") as file:
+        with open(query_results_path, "w", encoding="UTF8") as file:
             json.dump(
                 list(collected_entries),
                 file,
