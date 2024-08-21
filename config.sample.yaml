@@ -23,7 +23,7 @@ poizvedbe:
     leto_do: 1999
     m2_od: 40
     m2_do: 70
-    cena_m2_do: 3600
+    cena_do: 25200
 
   - ime: siska3
     posredovanje: prodaja
