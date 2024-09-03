@@ -73,7 +73,7 @@ class Scraper:
         logger.debug(f"Waiting for {seconds / 1000} seconds before moving on...")
         page.wait_for_timeout(seconds)
 
-    def _fetch_links(self, url: str) -> List[str]:
+    def _fetch_links(self, url: str) -> Set[str]:
         """
         Fetches the page content and extracts all relevant links.
         """
@@ -94,9 +94,9 @@ class Scraper:
             r'href="(https://www\.nepremicnine\.net/oglasi-[^/]+/[^/]+-[^/]+_[0-9]+/?)"',
             content,
         )
-        return list(set(links))
+        return set(links)
 
-    def _fetch_entries(self, links: List[str]) -> List[ExtractedEntry]:
+    def _fetch_entries(self, links: Set[str]) -> List[ExtractedEntry]:
         """
         Fetches entries from the list of links.
         """
@@ -143,9 +143,14 @@ class Scraper:
         if not price_element:
             raise ValueError("Price element not found on the page")
 
-        price_str = price_element.inner_text().strip()
+        # Get the text content of the first text node (the primary price)
+        price_str = price_element.evaluate("el => el.childNodes[0].nodeValue").strip()
+
+        # Clean up the price string
         price_str = price_str.replace("€", "").strip()
         price_str = price_str.replace(".", "").replace(",", ".")
+
+        # Convert to float and round
         price_float = round(float(price_str), 0)
         return price_float
 
