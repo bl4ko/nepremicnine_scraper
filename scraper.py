@@ -137,6 +137,8 @@ class Scraper:
         element = page.query_selector(selector)
         return element.inner_text() if element else "N/A"
 
+
+
     def _get_price(self, page: Page) -> float:
         price_element = page.query_selector(".cena span")
 
@@ -146,9 +148,15 @@ class Scraper:
         # Get the text content of the first text node (the primary price)
         price_str = price_element.evaluate("el => el.childNodes[0].nodeValue").strip()
 
+        # Remove non-numeric characters like 'do', 'cca', etc.
+        price_str = re.sub(r"[^\d,.-]", "", price_str)
+
         # Clean up the price string
         price_str = price_str.replace("€", "").strip()
         price_str = price_str.replace(".", "").replace(",", ".")
+
+        if not price_str:  # Check if price_str is still valid
+            raise ValueError("Price string is empty after cleanup")
 
         # Convert to float and round
         price_float = round(float(price_str), 0)
