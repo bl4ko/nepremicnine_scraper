@@ -79,7 +79,7 @@ class Scraper:
         """
         playwright, browser, _, page = self._setup_browser()
         logger.info(f"Going to page at {url}...")
-        page.goto(url, wait_until="networkidle")
+        page.goto(url)
 
         self._accept_cookies(page)
         self._wait_for_timeout(page, 2500, 4500)
@@ -137,13 +137,12 @@ class Scraper:
         element = page.query_selector(selector)
         return element.inner_text() if element else "N/A"
 
-
-
     def _get_price(self, page: Page) -> float:
         price_element = page.query_selector(".cena span")
 
         if not price_element:
-            raise ValueError("Price element not found on the page")
+            logger.error("Price element not found on the page")
+            return -1.0
 
         # Get the text content of the first text node (the primary price)
         price_str = price_element.evaluate("el => el.childNodes[0].nodeValue").strip()
@@ -156,7 +155,8 @@ class Scraper:
         price_str = price_str.replace(".", "").replace(",", ".")
 
         if not price_str:  # Check if price_str is still valid
-            raise ValueError("Price string is empty after cleanup")
+            logger.error("Price string is empty after cleanup")
+            return -1.0
 
         # Convert to float and round
         price_float = round(float(price_str), 0)
@@ -168,27 +168,28 @@ class Scraper:
         """
         # First attempt: Try to get square footage from the attribute list
         attributes_element = page.query_selector("#atributi")
+        square_footage = -1.0
         if attributes_element:
             for element in attributes_element.query_selector_all("li"):
                 if "Velikost" in element.inner_text():
                     square_footage = element.inner_text().split(":")[1].strip()
-                    return float(
+                    square_footage = float(
                         square_footage.replace("m\n2", "")
                         .replace("m2", "")
                         .strip()
                         .replace(",", ".")
                     )
-
         # Fallback approach: Try to extract square footage from the description
-        description_element = page.query_selector("#opis .kratek")
-        if description_element:
-            description = description_element.inner_text()
-            square_footage_match = re.search(r"([0-9]+,[0-9]+) m2", description)
-            if square_footage_match:
-                # Extract the numeric value before "m2" and return it
-                return float(square_footage_match.group(1).replace(",", "."))
-
-        return -1.0
+        if square_footage == -1.0:
+            description_element = page.query_selector("#opis .kratek")
+            if description_element:
+                description = description_element.inner_text()
+                # Regex that handles both comma or period decimal separators before "m2"
+                square_footage_match = re.search(r"([0-9]+(?:[.,][0-9]+)?)\s*m2", description)
+                if square_footage_match:
+                    # Extract the numeric value before "m2" and return it
+                    square_footage = float(square_footage_match.group(1).replace(",", "."))
+        return square_footage
 
     def _get_built_year(self, page: Page) -> Optional[int]:
         """
@@ -198,7 +199,7 @@ class Scraper:
         if description_element:
             description = description_element.inner_text()
             # Update the regex to match "zgrajeno l. <year>"
-            built_year_match = re.search(r"zgrajeno l\. (\d{4})", description)
+            built_year_match = re.search(r"zgrajen[ao] l\. (\d{4})", description)
             if built_year_match:
                 return int(built_year_match.group(1))
         return None
