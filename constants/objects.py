@@ -17,6 +17,7 @@ class ExtractedEntryEncoder(json.JSONEncoder):
         return super().default(o)
 
 
+# pylint: disable=too-many-instance-attributes
 class ExtractedEntry:
     """
     ExtractedEntry represents a single entry extracted from the website.
@@ -32,6 +33,7 @@ class ExtractedEntry:
         origin_url: str,
         built_year: Optional[int] = None,
         price_per_m2: Optional[int] = None,
+        author: Optional[str] = None,
     ):
         self.location: str = location
         self.square_footage: float = square_footage
@@ -44,12 +46,14 @@ class ExtractedEntry:
             if price_per_m2 is None
             else price_per_m2
         )
+        self.author: Optional[str] = author
 
     def __str__(self) -> str:
         return (
             f"ExtractedEntry{{link: {self.link}, Location: {self.location},"
             f"Square Footage: {self.square_footage}, Price: {self.price}}},"
             f"Built Year: {self.built_year}, Price per m2: {self.price_per_m2}"
+            f"Author: {self.author}, Origin URL: {self.origin_url}"
         )
 
     def __repr__(self) -> str:
@@ -67,6 +71,7 @@ class ExtractedEntry:
             "built_year": self.built_year,
             "origin_url": self.origin_url,
             "price_per_m2": self.price_per_m2,
+            "author": self.author,
         }
 
     def __hash__(self) -> int:
@@ -78,6 +83,7 @@ class ExtractedEntry:
                 self.price,
                 self.built_year,
                 self.origin_url,
+                self.author,
             )
         )
 
@@ -91,4 +97,5 @@ class ExtractedEntry:
             and self.price == other.price
             and self.built_year == other.built_year
             and self.origin_url == other.origin_url
+            and self.author == other.author
         )

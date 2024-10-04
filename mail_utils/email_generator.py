@@ -76,6 +76,7 @@ def create_email_body(entries: List[ExtractedEntry]) -> MIMEMultipart:
                 <th>Velikost</th>
                 <th>Cena</th>
                 <th>Cena/m2 (*0.95)</th>
+                <th>Avtor</th>
             </tr>"""
 
     for entry in entries:
@@ -90,6 +91,7 @@ def create_email_body(entries: List[ExtractedEntry]) -> MIMEMultipart:
                 <td>{entry.square_footage} m2</td>
                 <td>{price_formatted} €</td>
                 <td>{price_per_m2_formatted} €/m2</td>
+                <td>{entry.author}</td>
             </tr>
         """
 

@@ -113,6 +113,7 @@ class Scraper:
             location = self._get_element_text(page, "#opis .kratek strong")
             square_footage = self._get_square_footage(page)
             built_year = self._get_built_year(page)
+            author = self._get_author(page)
 
             page.close()
             browser.close()
@@ -126,6 +127,7 @@ class Scraper:
                     built_year=built_year,
                     location=location,
                     origin_url=self.start_url,
+                    author=author,
                 )
             )
         return entries
@@ -136,6 +138,17 @@ class Scraper:
         """
         element = page.query_selector(selector)
         return element.inner_text() if element else "N/A"
+
+    def _get_author(self, page: Page) -> Optional[str]:
+        """
+        Extracts the author of the listing from the page.
+        """
+        author_element = page.query_selector(".kontakt .prodajalec h2")
+        if author_element is not None:
+            author_element_str = author_element.inner_text().strip()
+            if len(author_element_str) > 0:
+                return author_element_str
+        return None
 
     def _get_price(self, page: Page) -> float:
         price_element = page.query_selector(".cena span")
